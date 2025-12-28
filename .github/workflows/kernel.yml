@@ -1,0 +1,35 @@
+name: Sedot kernel
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Working for kernel
+      run: |
+        cd ${GITHUB_WORKSPACE}
+        git clone https://github.com/cipin23/SM-A022F_SEA_RR_Opensource -b main
+        cd SM-A022F_SEA_RR_Opensource && mv * ${GITHUB_WORKSPACE}
+        cd ..
+        ls
+        rm -rf SM-A022F_SEA_RR_Opensource
+        
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "actions@github.com"
+        
+    - name: Add and Commit file
+      run: |
+        git add *
+        git commit -m "initial tree"
+        git push
